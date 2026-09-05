@@ -1,0 +1,46 @@
+schema_version: 1
+
+context:
+  name: de-mudab
+  version: "0.2.0"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/${{ name | replace('-', '_') }}-${{ version }}.tar.gz
+  sha256: 52a5eb81f5789bf7906ef192ad5b4ed965b37f3c055eb4245619b761c85d007e
+
+build:
+  number: 2
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv
+
+requirements:
+  host:
+    - pip
+    - python ${{ python_min }}.*
+    - poetry
+  run:
+    - python >=${{ python_min }}
+    - python-dateutil
+    - urllib3 >=1.25.3
+
+tests:
+  - python:
+      imports:
+        - deutschland.mudab
+      pip_check: true
+      python_version: ${{ python_min }}
+
+about:
+  summary: "Umweltbundesamt: Meeresumweltdatenbank (MUDAB)"
+  license: Apache-2.0
+  license_file:
+    - LICENSE
+  homepage: https://github.com/bundesAPI/mudab-api
+
+extra:
+  recipe-maintainers:
+    - jan-janssen
